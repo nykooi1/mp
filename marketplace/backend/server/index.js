@@ -5,7 +5,7 @@ const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestor
 //account key
 const serviceAccount = require('../marketplace-f5119-22762f894698.json');
 
-//initial application
+//initialize application with the private project key
 initializeApp({
   credential: cert(serviceAccount)
 });
