@@ -44,6 +44,8 @@ app.get("/addItem", (req, res) => {
 
 //login endpoint
 
+
+
 //create account endpoint
 
 //upload product endpoint
