@@ -15,13 +15,8 @@ const db = getFirestore();
 
 //express setup
 const express = require("express");
-var cors = require('cors');
 const PORT = process.env.PORT || 3001;
 const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
 //====== FUNCTIONS =======
 
@@ -45,14 +40,6 @@ async function addItem(){
 app.get("/addItem", (req, res) => {
   addItem();
   res.json({ message: "Item has been added" });
-});
-
-// Sign-up endpoint
-app.post("/signUp", (req, res) => {
-  console.log("sign up hit!");
-  console.log(req.body);
-  res.json(req.body);
-  // res.json({ message: "signUp" });
 });
 
 //login endpoint
