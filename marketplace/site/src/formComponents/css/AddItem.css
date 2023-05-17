@@ -1,3 +1,5 @@
+/* Form Styling */
+
 input, textarea, label{
     display:block;
     margin-bottom: 10px;
@@ -15,4 +17,26 @@ input, textarea{
 .headerLabel{
     font-size: 25px;
     font-weight: bold;
+}
+
+/* Dropzone Styling */
+
+.dropzone{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: #eeeeee;
+    border-style: dashed;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    outline: none;
+    transition: border .24s ease-in-out;
+}
+
+.dropzoneText{
+    font-size: 20px;
 }

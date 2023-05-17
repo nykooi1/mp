@@ -1,45 +1,84 @@
-//firebase, firestore imports
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
-
-//account key
-const serviceAccount = require('../marketplace-f5119-22762f894698.json');
-
-//initialize application with the private project key
-initializeApp({
-  credential: cert(serviceAccount)
-});
-
-//get the firestore database
-const db = getFirestore();
+//generate unique ids
+const { 
+  v1: uuidv1,
+  v4: uuidv4,
+} = require('uuid');
 
 //express setup
 const express = require("express");
+var cors = require('cors');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+//cors set up? for All?
+app.use(cors());
+
+//enable json parsing?
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//===== mongoDB START ======
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://nykooi60866:rU8q2U3E1BM62HTq@mpcluster.kbflrom.mongodb.net/?retryWrites=true&w=majority";
+
+//===== mongoDB END ======
+
 //====== FUNCTIONS =======
 
-//insert into items collection
-async function addItem(){
+//adds a document into the dbName.collectionName (mongoDB)
+async function addDocument(dbName, collectionName, document){
+
+  //connect to the client
+  const client = await MongoClient.connect(uri, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+  });
   
-  const data = {
-    name: 'Los Angeles',
-    state: 'CA',
-    country: 'USA'
-  };
-  
-  // Add a new document in collection "cities" with ID 'LA'
-  const res = await db.collection('items').doc('LA').set(data);
+  // Send a ping to confirm a successful connection
+  await client.db("admin").command({ ping: 1 });
+  console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+  //Select the database
+  const db = client.db(dbName);
+
+  //Get the collection
+  const collection = db.collection(collectionName);
+
+  //add ID
+  document.id = uuidv4();
+
+  // Insert the document
+  await collection.insertOne(document, (err, result) => {
+    if (err) {
+      console.error('Error inserting document:', err);
+      return;
+    } else {
+      console.log('Document inserted successfully:', result.insertedId);
+    }
+  });
+
+  //close the client
+  client.close();
 
 }
 
 //====== ENDPOINTS =======
 
 //insert a dummy document into the items collection in firebase
-app.get("/addItem", (req, res) => {
-  addItem();
-  res.json({ message: "Item has been added" });
+app.post("/addItem", (req, res) => {
+  
+  //get the body (JSON)
+  const itemData = req.body;
+
+  console.log(itemData);
+
+  //add document to the mongoDB "marketplace" db into the "items" collection
+  addDocument("marketplace", "items", itemData);
+
+  //send success message
+  res.json({message: "Item successfully inserted into the firestore database!"});
+
 });
 
 //login endpoint
