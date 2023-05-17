@@ -10,10 +10,21 @@ function AddItem() {
     //binary image data state
     const [binaryData, setBinaryData] = useState([]);
 
+    //convert an image array buffer to a binary string which can be used as an image source
+    function _arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+    }
+
     //on drop, do something with the files
     const onDrop = useCallback(acceptedFiles => {
 
-        var binaryData = [];
+        var images = [];
         
         //convert all files to binary data and store it in the array
         acceptedFiles.forEach((file) => {
@@ -23,17 +34,21 @@ function AddItem() {
             reader.onabort = () => console.log('file reading was aborted');
             reader.onerror = () => console.log('file reading has failed');
             reader.onload = () => {
-                // Do whatever you want with the file contents
-                const binaryStr = reader.result;
-                console.log(binaryStr);
-                binaryData.push(binaryStr);
+                
+                //get the array buffer for the image
+                const buffer = reader.result;
+                
+                //convert the buffer to a binary string
+                var binaryString = _arrayBufferToBase64(buffer);
+                images.push(binaryString);
+            
             }
             reader.readAsArrayBuffer(file);
 
         });
         
         //set the state array
-        setBinaryData(binaryData);
+        setBinaryData(images);
 
     }, []);
     
@@ -87,6 +102,14 @@ function AddItem() {
                 <div>
                     <h4>Files</h4>
                     <ul>{files}</ul>
+                </div>
+                {/* display the actual images */}
+                <div>
+                    {
+                        binaryData.map((data, index) => (
+                            <img className="itemImage" key={`item_image_${index}`} src={`data:image/jpeg;base64,${data}`} />
+                        ))
+                    }
                 </div>
             </div>
 
