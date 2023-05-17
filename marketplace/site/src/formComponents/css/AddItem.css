@@ -40,3 +40,8 @@ input, textarea{
 .dropzoneText{
     font-size: 20px;
 }
+
+/* Dropzone image display */
+.itemImage{
+    max-width:100%;
+}
