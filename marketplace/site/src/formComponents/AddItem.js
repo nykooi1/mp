@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import "./css/AddItem.css";
 import { useForm } from "react-hook-form";
@@ -7,18 +7,45 @@ import {useDropzone} from 'react-dropzone';
 
 function AddItem() {
 
+    //binary image data state
+    const [binaryData, setBinaryData] = useState([]);
+
+    //on drop, do something with the files
     const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
+
+        var binaryData = [];
+        
+        //convert all files to binary data and store it in the array
+        acceptedFiles.forEach((file) => {
+            
+            const reader = new FileReader();
+        
+            reader.onabort = () => console.log('file reading was aborted');
+            reader.onerror = () => console.log('file reading has failed');
+            reader.onload = () => {
+                // Do whatever you want with the file contents
+                const binaryStr = reader.result;
+                console.log(binaryStr);
+                binaryData.push(binaryStr);
+            }
+            reader.readAsArrayBuffer(file);
+
+        });
+        
+        //set the state array
+        setBinaryData(binaryData);
+
     }, []);
     
+    //dropzone states
     const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
     //accepted files array
     const files = acceptedFiles.map(file => (
         <li key={file.path}>
-          {file.path} - {file.size} bytes
+            {file.path} - {file.size} bytes
         </li>
-      ));
+    ));
 
     //ASYNC form handling state
     const { register, handleSubmit } = useForm();
@@ -43,6 +70,7 @@ function AddItem() {
 
     }
 
+    //JSX
     return (
         <div>
 
