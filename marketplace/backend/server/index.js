@@ -81,6 +81,14 @@ app.post("/addItem", (req, res) => {
 
 });
 
+// Sign-up endpoint
+app.post("/signUp", (req, res) => {
+  console.log("sign up hit!");
+  console.log(req.body);
+  res.json(req.body);
+  // res.json({ message: "signUp" });
+});
+
 //login endpoint
 
 //create account endpoint
