@@ -23,7 +23,7 @@ const SignUp = () => {
           })
         
         const data = await res.json()
-        console.log("response=", data)
+        console.log("response for sign up =", data)
     } 
 
     

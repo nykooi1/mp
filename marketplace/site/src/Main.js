@@ -6,7 +6,8 @@ import { BrowserRouter as Router, Routes, Route}
 import Home from './Home';
 import AddItem from './formComponents/AddItem';
 import SignUp from './formComponents/SignUp';
-import Login from './formComponents/Login';
+import LogIn from './formComponents/LogIn';
+import TestLogin from './formComponents/TestLogin';
 
 const Main = () => {
   return (
@@ -15,7 +16,7 @@ const Main = () => {
         <Route exact path='/' element={<Home/>}></Route>
         <Route exact path='/AddItem' element={<AddItem/>}></Route>
         <Route exact path='/SignUp' element={<SignUp/>}></Route>
-        <Route exact path='/Login' elemment={<Login/>}></Route>
+        <Route exact path='/LogIn' element={<LogIn />}></Route>
       </Routes>
     </Router>
   );

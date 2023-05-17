@@ -1,6 +1,8 @@
 //firebase, firestore imports
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+
 
 //account key
 const serviceAccount = require('../marketplace-f5119-22762f894698.json');
@@ -15,8 +17,14 @@ const db = getFirestore();
 
 //express setup
 const express = require("express");
+var cors = require('cors');
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 //====== FUNCTIONS =======
 
@@ -34,6 +42,11 @@ async function addItem(){
 
 }
 
+// create new user using sign in
+// const createAccount = async () => {
+//   const email = 
+// }
+
 //====== ENDPOINTS =======
 
 //insert a dummy document into the items collection in firebase
@@ -42,9 +55,15 @@ app.get("/addItem", (req, res) => {
   res.json({ message: "Item has been added" });
 });
 
+
+// sign up endpoint
+app.post("/signUp", (req, res) => {
+  // console.log(req.body);
+  res.json({ message: "Account Signed Up" });
+});
+
+
 //login endpoint
-
-
 
 //create account endpoint
 
