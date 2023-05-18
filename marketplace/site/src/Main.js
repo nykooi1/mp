@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route}
 
 //pages
 import Home from './Home';
-import AddItem from './formComponents/AddItem';
+import AddItem from './components/AddItem';
 
 const Main = () => {
   return (
