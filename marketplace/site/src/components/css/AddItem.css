@@ -1,0 +1,82 @@
+/* Parent container styling */
+.parentContainer{
+    padding-top: 56px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-bottom: 100px;
+}
+
+/* Form Styling */
+
+input, textarea, label{
+    display:block;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+input, textarea {
+    padding: 5px 10px;
+}
+
+input, textarea{
+    width: 100%;
+}
+
+.headerLabel{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.imageCol{
+    position: relative;
+    padding: 10px 5px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.imagesContainer{
+    border: 3px dashed black;
+}
+
+.fieldContainer{
+    margin-bottom: 25px;
+    width: 350px;
+}
+
+.itemDetailsForm input, select{
+    width: 100%;
+    font-size: 20px;
+    padding: 15px;
+}
+
+.itemDetailsForm select{
+    font-size: 20px !important;
+}
+
+.submitItem{
+    font-size: 14px !important;
+}
+
+.categorySelector{
+    height: 200px;
+    overflow: scroll;
+    font-size: 16px;
+}
+
+.categorySelectorContainer{
+    border: 1px solid #767676;
+    border-radius: 2px;
+}
+
+.backButton{
+    font-size: 16px;
+    padding: 10px;
+}

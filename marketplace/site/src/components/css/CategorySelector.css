@@ -1,0 +1,21 @@
+.categoryRow{
+    cursor:pointer;
+    position: relative;
+    padding: 5px 15px 5px 15px;
+}
+
+.categoryRow:hover{
+    background-color: black;
+    color: white;
+}
+
+.backButton{
+    cursor: pointer;
+}
+
+.nextArrow{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+}

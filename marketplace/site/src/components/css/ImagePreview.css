@@ -1,0 +1,16 @@
+/* Containe for the exit icon and the image itself */
+.itemImageContainer{
+    position:relative;
+    height: 300px;
+}
+
+/* X Icon */
+.itemImageRemoveIcon{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    color: red;
+}
