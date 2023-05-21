@@ -3,7 +3,7 @@ import React from 'react';
 import "./css/CategorySelector.css";
 
 //takes in the image url and the function to be able to remove the (current) image (aka removing itself)
-function CategorySelector({categoryStack, navigateTo}) {
+function CategorySelector({categoryStack, navigateTo, selectCategory}) {
 
     /* 
     
@@ -23,7 +23,11 @@ function CategorySelector({categoryStack, navigateTo}) {
                 //get the top of the stack & create the rows
                 categoryStack[categoryStack.length - 1]?.map(category => 
                     //only add the onclick if there are children
-                    <div key={category["id"]} className="categoryRow" onClick={() => category["children"].length > 0 ? navigateTo(category["id"]) : null}>
+                    <div key={category["id"]} className="categoryRow" onClick={
+                        
+                            () => category["children"].length > 0 ? navigateTo(category["id"]) : selectCategory(category["label"])
+                        
+                        }>
                         
                         {/* display the label */}
                         {category["label"]}

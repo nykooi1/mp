@@ -1,9 +1,9 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 
 import "./css/AddItem.css";
 import { useForm } from "react-hook-form";
 
-import Button from 'react-bootstrap/Button'
+// import Button from 'react-bootstrap/Button'
 
 //import the category selector component
 import CategorySelector from './CategorySelector';
@@ -13,8 +13,8 @@ import ImagePreviewComponent from './ImagePreviewComponent';
 
 function AddItem() {
 
-    //store image urls
-    const [imageSources, setImageSources] = useState([]);
+    //store the actual image object
+    const [imageObjects, setImageObjects] = useState([]);
 
     //ASYNC form handling state
     const { register, handleSubmit } = useForm();
@@ -24,6 +24,12 @@ function AddItem() {
         
         //debug
         console.log(formData);
+
+        //append category
+        formData["category"] = selectedCategory;
+
+        //append images
+        formData["images"] = imageObjects;
 
         //create post request
         const itemPostRequest = {
@@ -42,18 +48,14 @@ function AddItem() {
     //add item image
     function addItemImage(event){
         const [file] = document.getElementById("addImageInput").files;
-        if (file) {
-            var url = URL.createObjectURL(file);
-            console.log(url);
-            setImageSources([...imageSources, url]);
-        }
+        setImageObjects([...imageObjects, file]);
     }
 
     //remove item from the state
-    function removeItemImage(url){
+    function removeItemImage(name){
         //filter to allow all image sources that are not equal to the one to be deleted.
-        setImageSources((imageSources) =>
-            imageSources.filter((source) => source !== url));
+        setImageObjects((imageObjects) =>
+            imageObjects.filter((object) => object.name !== name));
     }
     
     /* 
@@ -121,6 +123,9 @@ function AddItem() {
     //initially push the entire thing so that I am looping through the highest level
     const [categoryStack, setCategoryStack] = useState([categoryOptions]);
 
+    //maintain the selected category
+    const [selectedCategory, setSelectedCategory] = useState("");
+
     //function to handle navigation back to the parent object
     function navigateBack(){
 
@@ -148,7 +153,7 @@ function AddItem() {
 
         //find the child object from the id
         for(var i = 0; i < top.length; i++){
-            if(top[i]["id"] == id){
+            if(top[i]["id"] === id){
                 child = top[i]["children"];
             }
         }
@@ -162,10 +167,20 @@ function AddItem() {
     function atRoot(){
         //get the top of the stack
         var top = categoryStack[categoryStack.length - 1];
-        if(top[0].id == '1'){
+        if(top[0].id === '1'){
             return true;
         }
         return false;
+    }
+
+    //set the selected category
+    function selectCategory(label){
+        //set the state
+        setSelectedCategory(label);
+        //remove everything from the category stack
+        var copy = [...categoryStack];
+        copy.length = 1;
+        setCategoryStack(copy);
     }
 
     return (
@@ -187,10 +202,10 @@ function AddItem() {
                 </form>
 
                 {/* show the number of images selected (maximum 10) */}
-                <p>{imageSources.length} / 10 selected</p>
+                <p>{imageObjects.length} / 10 selected</p>
                 
                 {/* display the actual images (conditional rendering) */}
-                {imageSources.length === 0 ? null : (
+                {imageObjects.length === 0 ? null : (
 
                     <div>
                         {/* bootstrap container column */}
@@ -198,9 +213,9 @@ function AddItem() {
                             <div className="row">
                                 {
                                     /* the images will actually be stored in bootstrap columns... */
-                                    imageSources.map((data, index) => (
+                                    imageObjects.map((data, index) => (
                                         <div className="col-3 imageCol">
-                                            <ImagePreviewComponent src={data} removeItemImage={removeItemImage} />
+                                            <ImagePreviewComponent key={"thumbnail" + index} imageObject={data} removeItemImage={removeItemImage} />
                                         </div>
                                     ))
                                 }
@@ -221,16 +236,28 @@ function AddItem() {
             <form onSubmit={handleSubmit(submitItem)} className="itemDetailsForm">
 
                 <div className="fieldContainer">
-                    <input {...register("title")} id="title" placeholder="Title" required></input>
+                    <input className="form-control" {...register("title")} id="title" placeholder="Title" required></input>
                 </div>
                 
                 <div className="fieldContainer">
-                    <input {...register("price")} id="price" placeholder="Price" required></input>
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text">$</span>
+                        </div>
+                        <input {...register("price")} type="number" className="form-control" placeholder="Amount (to the nearest dollar)" />
+                        <div className="input-group-append">
+                            <span className="input-group-text">.00</span>
+                        </div>
+                    </div>
                 </div>
                 
-                <label>Select a Category</label>
+                <label><strong>Select a Category</strong></label>
 
-                <p>Selected:</p>
+                <div className="fieldContainer">
+                    <p>Selected: {selectedCategory !== "" ? selectedCategory : <i>No Category Selected</i>}</p>
+                    {selectedCategory !== "" ? <div className="removeCategoryButton" onClick={() => setSelectedCategory("")}>X</div> : <></>}
+                </div>
+                
 
                 <div className="fieldContainer categorySelectorContainer">
                     {/* display what is currently selected */}
@@ -240,12 +267,12 @@ function AddItem() {
                     }
                     {/* scrollable selector */}
                     <div className="categorySelector">
-                        <CategorySelector categoryStack={categoryStack} navigateBack={navigateBack} navigateTo={navigateTo} />
+                        <CategorySelector categoryStack={categoryStack} navigateBack={navigateBack} navigateTo={navigateTo} selectCategory={selectCategory} />
                     </div>
                 </div>
                 
                 <div className="fieldContainer">
-                    <select {...register("condition")} placeholder="Condition" defaultValue="Condition" required>
+                    <select className="form-select" {...register("condition")} placeholder="Condition" defaultValue="Condition" required>
                         <option value="new">New</option>
                         <option value="used-like-new">Used - Like New</option>
                         <option value="used-good">Used - Good</option>
@@ -253,7 +280,24 @@ function AddItem() {
                     </select>
                 </div>
 
-                <input className="btn btn-outline-dark submitItem" type="submit" value="Add Item"></input>
+                <label><strong>More Details</strong></label>
+                <p>Attract more interest by including more details</p>
+
+                <div className="fieldContainer">
+                    <input className="form-control" {...register("brand")} id="brand" placeholder="Brand Name" required></input>
+                </div>
+
+                <div className="fieldContainer">
+                    <textarea className="form-control" placeholder="Description" {...register("description")}></textarea>
+                </div>
+
+                <div className="fieldContainer">
+                Marketplace items are public and can be seen by anyone.
+                Items like animals, drugs, weapons, counterfeits, and other items that infringe intellectual property aren't allowed on Marketplace. 
+                See our Commerce Policies.
+                </div>
+
+                <input className="btn btn-outline-dark submitItem" type="submit" value="Publish Item"></input>
 
             </form>
 

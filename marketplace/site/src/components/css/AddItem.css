@@ -16,9 +16,6 @@ input, textarea, label{
 
 input, textarea {
     padding: 5px 10px;
-}
-
-input, textarea{
     width: 100%;
 }
 
@@ -49,11 +46,12 @@ input[type="file"] {
 .fieldContainer{
     margin-bottom: 25px;
     width: 350px;
+    position: relative;
 }
 
 .itemDetailsForm input, select{
     width: 100%;
-    font-size: 20px;
+    font-size: 16px;
     padding: 15px;
 }
 
@@ -72,11 +70,23 @@ input[type="file"] {
 }
 
 .categorySelectorContainer{
-    border: 1px solid #767676;
-    border-radius: 2px;
+    border: 1px solid #ced4da;
 }
 
 .backButton{
     font-size: 16px;
     padding: 10px;
+}
+
+.removeCategoryButton{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    right: 0px;
+}
+
+.input-group-text{
+    height: 100%;
+    border-radius: 0px !important;
 }
