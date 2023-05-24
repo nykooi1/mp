@@ -1,7 +1,11 @@
 function Home() {
 
     return (
-        <h1>Welcome to our Homepage!</h1>
+        <div>
+            <h1>Welcome to our Homepage!</h1>
+            <h2>You are signed in!</h2>
+        </div>
+       
     );
 
 }
