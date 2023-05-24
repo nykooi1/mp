@@ -1,0 +1,54 @@
+.profile-page-container {
+    display: flex;
+    flex-direction: column;
+}
+.profile-header {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+  }
+
+.profile-stats {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+}
+
+.profile-stats-followers, .profile-stats-transactions, .profile-stats-ratings {
+    display: flex;
+    flex-direction: column;
+}
+
+.followerCount, .transactionCount, .ratingsDisplay {
+    font-weight: bold
+}
+
+.profile-picture {
+    display:flex;
+    justify-content: center;
+    width: 20%;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+}
+
+.profile-name-location {
+    display: flex;
+    flex-direction: column; 
+    width: 80%;
+}
+
+.profile-actions {
+    display: flex;
+    width: 40%;
+}
+  
+.user-bio {
+    display: flex;
+    flex-direction: column;
+    width: 30%
+
+}
