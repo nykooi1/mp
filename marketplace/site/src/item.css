@@ -21,3 +21,42 @@
 .item .location{
     font-size: 12px;
 }
+
+.item:hover{
+    cursor: pointer;
+}
+
+.each-slide-effect .background-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: contain;
+    background-position: center;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-color: black;
+}
+
+.modal-full .imageSlider, .modal-full .imageSlider{
+    height: 100%;
+}
+
+.react-slideshow-container, .react-slideshow-wrapper, .each-slide-effect, .images-wrap{
+    height: 100%;
+}
+
+.imageSlider > div > div{
+    height: 100%;
+}
+
+.itemDetail h1{
+    font-size: 24px;
+}
+
+.itemDetail h2{
+    font-size: 18px;
+}
+
+.itemDetail .row{
+    height: auto;
+}

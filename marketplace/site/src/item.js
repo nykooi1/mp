@@ -1,14 +1,21 @@
 import "./global.css";
 import "./item.css";
+import React from 'react';
 
-function Item({imgURL, price, title, location}) {
+function Item({item, handleShow, setItemDetail}) {
+  
+  function showItemDetail(){
+    handleShow();
+    setItemDetail(item);
+  }
+  
   return (
-    <div className="item">
-        <img src={imgURL}/>
+    <div onClick={() => showItemDetail()} className="item">
+        <img src={item.images[0]}/>
         <div className="description">
-            <div className="price">{price}</div>
-            <div className="title">{title}</div>
-            <div className="location">{location}</div>
+            <div className="price">${item.price}</div>
+            <div className="title">{item.title}</div>
+            <div className="location">Los Angeles, CA</div>
         </div>
     </div>
   );

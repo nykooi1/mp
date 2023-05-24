@@ -1,46 +1,41 @@
-import Item from "./item"
+import React, { useState, useEffect } from 'react';
+import ItemDetail from "./itemDetail";
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import "./global.css";
+import "./itemGrid"
+import ItemGrid from './itemGrid';
+
 
 function Home() {
 
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [itemDetail, setItemDetail] = useState([]);
+
+    const [items, setItems] = useState([]);
+
+    async function getItems(){
+        const response = await fetch('http://localhost:3001/getItems'); // Replace with your API endpoint
+        const jsonData = await response.json();  
+
+        setItems(jsonData);
+        console.log(jsonData);
+    }
+
+    useEffect(() => {
+        getItems();
+      }, []);
+
     return (
         <Container>
-            <Row>
-                <Col>
-                    <Item 
-                        imgURL="https://images.pexels.com/photos/1070360/pexels-photo-1070360.jpeg"
-                        title="Nike Air Jordan"
-                        price="$250"
-                        location="Los Angeles, CA"
-                />
-                </Col>
-                <Col>
-                    <Item 
-                            imgURL="https://images.pexels.com/photos/1070360/pexels-photo-1070360.jpeg"
-                            title="Nike Air Jordan"
-                            price="$250"
-                            location="Los Angeles, CA"
-                    />
-                </Col>
-                <Col>
-                    <Item 
-                            imgURL="https://images.pexels.com/photos/1070360/pexels-photo-1070360.jpeg"
-                            title="Nike Air Jordan"
-                            price="$250"
-                            location="Los Angeles, CA"
-                    />
-                </Col>
-                <Col>
-                    <Item 
-                            imgURL="https://images.pexels.com/photos/1070360/pexels-photo-1070360.jpeg"
-                            title="Nike Air Jordan"
-                            price="$250"
-                            location="Los Angeles, CA"
-                    />
-                </Col>
-            </Row>
+            {/* populate items */}
+            <ItemGrid items={items} handleShow={handleShow} setItemDetail={setItemDetail}></ItemGrid>
+
+            {/* pop-up modal */}
+            <ItemDetail show={show} handleClose={handleClose} detail={itemDetail}></ItemDetail>
         </Container>
           
     );

@@ -63,6 +63,34 @@ async function addDocument(dbName, collectionName, document){
 
 }
 
+// retrieves a collection and returns an array
+async function getCollection(dbName, collectionName){
+  //connect to the client
+  const client = await MongoClient.connect(uri, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+  });
+  
+  // Send a ping to confirm a successful connection
+  await client.db("admin").command({ ping: 1 });
+  console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+  //Select the database
+  const db = client.db(dbName);
+
+  //Get the collection
+  const collection = db.collection(collectionName);
+
+  const documents = await collection.find().toArray();
+  console.log('Retrieved collection:', documents);
+
+  //close the client
+  client.close();
+
+  return documents;
+
+}
+
 //====== ENDPOINTS =======
 
 //insert a dummy document into the items collection in firebase
@@ -94,6 +122,17 @@ app.post("/signUp", (req, res) => {
 //create account endpoint
 
 //upload product endpoint
+
+//get items endpoint
+app.get("/getItems", async (req, res) => {
+
+  // get items from database
+  const items = await getCollection("marketplace", "items");
+
+  // send items to client
+  res.json(items);
+
+});
 
 //listening
 app.listen(PORT, () => {
