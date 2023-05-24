@@ -20,23 +20,43 @@ function AddItem() {
     const { register, handleSubmit } = useForm();
 
     //submit the form
-    const submitItem = (formData) =>{
+    const submitItem = (data) =>{
+
+        /* 
         
-        //debug
-        console.log(formData);
+        Note to self:
 
-        //append category
-        formData["category"] = selectedCategory;
+        I am using the hook to handle when the form is submitted
 
-        //append images
-        formData["images"] = imageObjects;
+        I then create a FormData() object and append all the inputs to it
+
+        Then I post it
+        
+        */
+
+        const formData = new FormData();
+
+        //Note: you MUST append files like this...
+        imageObjects.forEach((file, index) => {
+            //why on earth do i need to specify a filename??
+            const fileBlob = new Blob([file], { type: file.type });
+            formData.append("images[]", fileBlob, file.name);
+        });
+
+        formData.append("category", selectedCategory);
+        formData.append("title", data.title);
+        formData.append("price", data.price);
+        formData.append("brand", data.brand);
+        formData.append("condition", data.condition);
+        formData.append("description", data.description);
 
         //create post request
         const itemPostRequest = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+            body: formData
         };
+
+        console.log(formData);
 
         //post the data and get the response
         fetch('http://localhost:3001/addItem', itemPostRequest)
@@ -47,7 +67,10 @@ function AddItem() {
 
     //add item image
     function addItemImage(event){
+        
+        //get the "first" file with [] notation
         const [file] = document.getElementById("addImageInput").files;
+    
         setImageObjects([...imageObjects, file]);
     }
 
@@ -194,7 +217,7 @@ function AddItem() {
             {/* image selector */}
             <div>
 
-                <form runat="server">
+                <form>
                     <label className="custom-file-upload btn btn-outline-dark">
                         ADD IMAGE
                         <input accept="image/*" type='file' id="addImageInput" onChange={addItemImage} />
@@ -233,7 +256,7 @@ function AddItem() {
             <p>Be as descriptive as possible.</p>
 
             {/* item form (text fields) */}
-            <form onSubmit={handleSubmit(submitItem)} className="itemDetailsForm">
+            <form onSubmit={handleSubmit(submitItem)} className="itemDetailsForm" encType="multipart/form-data">
 
                 <div className="fieldContainer">
                     <input className="form-control" {...register("title")} id="title" placeholder="Title" required></input>
